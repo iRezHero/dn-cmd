@@ -1,5 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -75,24 +81,34 @@ internal class MakeCommand : Command<MakeCommand.Settings>
 
     private string GenerateCommand(string commandName)
     {
-        var templatePath = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "Templates",
-            "CommandTemplate.tt"
-        );
-        if (!File.Exists(templatePath))
-        {
-            throw new FileNotFoundException($"T4 template not found at: {templatePath}");
-        }
+        var assembly = Assembly.GetExecutingAssembly();
+        // Get embedded resource names
+        string[] resourceNames = assembly.GetManifestResourceNames();
+        // Find the T4 template resource
+        var templateResource = resourceNames.First(rn => rn.EndsWith("CommandTemplate.tt"));
 
-        var templateContent = File.ReadAllText(templatePath);
+        using Stream stream = assembly.GetManifestResourceStream(templateResource);
+        using StreamReader reader = new StreamReader(stream);
+        var templateContent = reader.ReadToEnd();
+
+        // var templatePath = Path.Combine(
+        //     Directory.GetCurrentDirectory(),
+        //     "Templates",
+        //     "CommandTemplate.tt"
+        // );
+        // if (!File.Exists(templatePath))
+        // {
+        //     throw new FileNotFoundException($"T4 template not found at: {templatePath}");
+        // }
+
+        // var templateContent = File.ReadAllText(templatePath);
 
         // Simple template replacement (basic implementation without full T4 processing)
         var result = templateContent
             .Replace("<#@ parameter name=\"CommandName\" type=\"System.String\" #>", "")
             .Replace("<#@ parameter name=\"Namespace\" type=\"System.String\" #>", "")
             .Replace("<#= CommandName #>", commandName)
-            .Replace("<#= Namespace #>", "dn_cmd");
+            .Replace("<#= Namespace #>", "DotNet.Artisan");
 
         // Remove T4 directives for this simple implementation
         var lines = result.Split('\n').ToList();
