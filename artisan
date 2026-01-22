@@ -1,0 +1,5 @@
+#!/bin/bash
+# Artisan CLI entry point for Unix/Linux/macOS
+# This script calls dotnet-artisan tool
+
+dotnet artisan "$@"

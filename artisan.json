@@ -1,0 +1,26 @@
+{
+  "commandsPath": "Console/Commands",
+  "enableCommandDiscovery": true,
+  "aliases": {
+    "mm": "make:model",
+    "mc": "make:command",
+    "serve": "run"
+  },
+  "providers": [
+    "DotNet.Artisan.Providers.DatabaseProvider",
+    "DotNet.Artisan.Providers.CacheProvider"
+  ],
+  "paths": {
+    "commands": "Console/Commands",
+    "models": "Models",
+    "controllers": "Controllers",
+    "views": "Views",
+    "migrations": "Data/Migrations",
+    "seeds": "Data/Seeds"
+  },
+  "logging": {
+    "level": "Information",
+    "enableColors": true,
+    "enableTimestamps": false
+  }
+}

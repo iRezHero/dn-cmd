@@ -1,46 +1,29 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
+using DotNet.Artisan.Commands;
+using DotNet.Artisan.Core;
 using Spectre.Console.Cli;
 
-Console.WriteLine();
-var app = new CommandApp();
-
-app.Configure(config =>
+namespace DotNet.Artisan
 {
-    config
-        .AddCommand<MakeModel>("make:model")
-        .WithDescription("Makes a new database model.")
-        .WithExample(new[] { "make:model", "Person" });
-
-    config
-        .AddCommand<MakeCommand>("make:command")
-        .WithDescription("Makes a new command.")
-        .WithExample(new[] { "make:command", "MyCommand" });
-});
-
-app.Configure(config =>
-{
-    var consoleCommandsDirectory = Path.Combine(
-        Directory.GetCurrentDirectory(),
-        "Console",
-        "Commands"
-    );
-    if (Directory.Exists(consoleCommandsDirectory))
+    class Program
     {
-        foreach (var file in Directory.GetFiles(consoleCommandsDirectory, "*.cs"))
+        static int Main(string[] args)
         {
-            var commandName = Path.GetFileNameWithoutExtension(file);
-            var commandType = Type.GetType(commandName);
-            if (commandType != null)
-            {
-                var method = config.GetType().GetMethod("AddCommand");
-                var genericMethod = method!.MakeGenericMethod(commandType);
-                genericMethod.Invoke(config, new object[] { commandName.ToLowerInvariant() });
-            }
+            Console.WriteLine();
+
+            // Load artisan configuration
+            var configuration = ArtisanConfigurationManager.LoadConfiguration();
+
+            // Create artisan host with configuration
+            var app = ArtisanHost
+                .CreateBuilder(args)
+                .AddCommand<MakeModel>("make:model")
+                .AddCommand<MakeCommand>("make:command")
+                .UseCommandDiscovery(configuration.CommandsPath)
+                .Build();
+
+            return app.Run(args);
         }
     }
-});
-
-app.Run(args);
+}

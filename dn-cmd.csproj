@@ -3,20 +3,51 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>dn-artisan</AssemblyName>
-    <RootNamespace>dn_cmd</RootNamespace>
+    <RootNamespace>DotNet.Artisan</RootNamespace>
+    <Nullable>enable</Nullable>
 
+    <!-- NuGet Package Configuration -->
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>artisan</ToolCommandName>
     <PackageId>DotNet.Artisan</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Your Name</Authors>
+    <Description>.NET CLI tool for creating artisan commands - Laravel-style CLI for .NET projects</Description>
+    <PackageTags>dotnet;cli;tool;command;artisan;generator</PackageTags>
+    <PackageProjectUrl>https://github.com/yourusername/dn-cmd</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yourusername/dn-cmd</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     <EmbeddedResource Include="Templates\**" />
+  </ItemGroup>
+
+  <!-- Make sure all needed assemblies are included -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="DotNet.Artisan.Tests" />
   </ItemGroup>
 </Project>
